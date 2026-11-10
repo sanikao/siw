@@ -1,15 +1,17 @@
-public class Conference extends Event {
+import java.time.LocalDate;
+
+public class Conference extends Event implements Invitable {
     private String topic;
     private int speakerCount;
 
-    public Conference(String name, String date, int guestCount, double budget,
+    public Conference(String name, LocalDate date, int guestCount, double budget,
                       String topic, int speakerCount) {
         super(name, date, guestCount, budget);
         setTopic(topic);
         setSpeakerCount(speakerCount);
     }
 
-    public Conference(String id, String name, String date, int guestCount, double budget,
+    public Conference(String id, String name, LocalDate date, int guestCount, double budget,
                       String topic, int speakerCount) {
         super(id, name, date, guestCount, budget);
         setTopic(topic);
@@ -21,13 +23,13 @@ public class Conference extends Event {
 
     public void setTopic(String topic) {
         if (topic == null || topic.trim().isEmpty())
-            throw new IllegalArgumentException("Topic cannot be empty");
+            throw new IllegalArgumentException("Topic cannot be empty.");
         this.topic = topic;
     }
 
     public void setSpeakerCount(int speakerCount) {
         if (speakerCount < 0)
-            throw new IllegalArgumentException("Speaker count cannot be negative");
+            throw new IllegalArgumentException("Speaker count cannot be negative.");
         this.speakerCount = speakerCount;
     }
 
@@ -45,20 +47,13 @@ public class Conference extends Event {
     }
 
     @Override
+    public void sendInvitations() {
+        System.out.println("Sending " + getGuestCount() + " conference passes for " + topic);
+    }
+
+    @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("Type: Conference | Topic: " + topic
-                + " | Speakers: " + speakerCount);
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        return super.equals(object);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
+        System.out.println("Type: Conference | Topic: " + topic + " | Speakers: " + speakerCount);
     }
 }
-

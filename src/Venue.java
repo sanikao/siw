@@ -1,38 +1,40 @@
+import java.util.Objects;
+import java.util.UUID;
+
+// Aggregation: a Venue exists on its own, events only reference it (1 venue : N events).
 public class Venue {
-    private String name = "Unknown venue";
-    private int capacity = 1;
-    private double rentalPrice = 0.0;
+    private final String id;
+    private String name;
+    private int capacity;
+    private double rentalPrice;
 
     public Venue(String name, int capacity, double rentalPrice) {
+        this.id = UUID.randomUUID().toString();
         setName(name);
         setCapacity(capacity);
         setRentalPrice(rentalPrice);
     }
 
+    public String getId() { return id; }
     public String getName() { return name; }
+    public int getCapacity() { return capacity; }
+    public double getRentalPrice() { return rentalPrice; }
+
     public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            System.out.println("Validation error: venue name cannot be empty");
-            return;
-        }
+        if (name == null || name.trim().isEmpty())
+            throw new IllegalArgumentException("Venue name cannot be empty.");
         this.name = name;
     }
 
-    public int getCapacity() { return capacity; }
     public void setCapacity(int capacity) {
-        if (capacity <= 0) {
-            System.out.println("Validation error: capacity must be positive");
-            return;
-        }
+        if (capacity <= 0)
+            throw new IllegalArgumentException("Capacity must be positive.");
         this.capacity = capacity;
     }
 
-    public double getRentalPrice() { return rentalPrice; }
     public void setRentalPrice(double rentalPrice) {
-        if (rentalPrice < 0) {
-            System.out.println("Validation error: rental price cannot be negative");
-            return;
-        }
+        if (rentalPrice < 0)
+            throw new IllegalArgumentException("Rental price cannot be negative.");
         this.rentalPrice = rentalPrice;
     }
 
@@ -40,8 +42,21 @@ public class Venue {
         return guests <= capacity;
     }
 
-    public void displayInfo() {
-        System.out.println("Venue: " + name + " | Capacity: " + capacity
-                + " | Rental: $" + rentalPrice);
+    @Override
+    public String toString() {
+        return "Venue: " + name + " | Capacity: " + capacity + " | Rental: $" + rentalPrice;
+    }
+
+    // Business key: id
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        return id.equals(((Venue) object).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
